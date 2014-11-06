@@ -25,8 +25,8 @@ typedef unsigned __int16 uint16_t;
 #define snprintf _snprintf
 #define __func__ __FUNCTION__
 #define FLAC__NO_DLL
-#define lrint(f)  ((long)(f))
-#define lrintf(f) lrint(f)
+#define _lrint(f)  ((long)(f))
+#define _lrintf(f) _lrint(f)
 
 /* Set to 1 if the compile is GNU GCC. */
 #undef COMPILER_IS_GCC
