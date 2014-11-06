@@ -1026,8 +1026,19 @@ int sox_seek(sox_format_t * ft, sox_uint64_t offset, int whence)
     /* If file is a seekable file and this handler supports seeking,
      * then invoke handler's function.
      */
-    if (ft->seekable && ft->handler.seek)
-      return (*ft->handler.seek)(ft, offset);
+    if (ft->seekable && ft->handler.seek) {
+      int rval = (*ft->handler.seek)(ft, offset);
+
+      /* Make sure we re-set olength to match the new file position, if the
+       * seek succeeded.
+       * This prevents sox_read from EOFing after seeking backwards.
+       * FIXME: Make sure there is no more sane way of doing this.
+       */
+      if (rval == 0)
+        ft->olength = offset;
+
+      return rval;
+    }
     return SOX_EOF; /* FIXME: return SOX_EBADF */
 }
 
